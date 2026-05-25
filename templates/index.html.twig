@@ -8,24 +8,7 @@
 </head>
 <body>
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">Our Store</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#cart">Cart</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    {% include '_navbar.html.twig' %}
 
     <!-- Products Section -->
     <div class="container my-5">

@@ -78,30 +78,7 @@
 </head>
 <body>
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{{ path('app_index') }}">🛍️ Our Store</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_index') }}">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ path('app_browse_categories') }}">Catégories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_cart') }}">🛒 Panier</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_profile') }}">Profil</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    {% include '_navbar.html.twig' %}
 
     <!-- Hero Section -->
     <div class="hero-section text-white">
