@@ -1,26 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electronics - Our Store</title>
+    <title>{{ category.name }} - Our Store</title>
+    <meta name="description" content="Découvrez les produits de la catégorie {{ category.name }} dans notre boutique.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+
+        .navbar { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important; box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+        .navbar-brand { font-weight: 800; font-size: 1.4rem; color: #fff !important; }
+        .nav-link { font-weight: 500; transition: color .2s; }
+        .nav-link:hover { color: #6c63ff !important; }
+
+        /* Jumbotron catégorie */
+        .category-hero {
+            background: linear-gradient(135deg, #6c63ff 0%, #3f3d56 70%, #1a1a2e 100%);
+            border-radius: 20px;
+            position: relative; overflow: hidden;
+        }
+        .category-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='20' cy='20' r='15'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .category-hero-icon { font-size: 4rem; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+
+        /* Product cards */
+        .product-card {
+            border: none; border-radius: 14px;
+            transition: transform .25s ease, box-shadow .25s ease;
+            overflow: hidden; background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 14px 36px rgba(0,0,0,0.13); }
+        .product-card .card-img-top {
+            height: 200px; object-fit: cover;
+            background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+        }
+        .product-img-placeholder {
+            height: 200px; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+            font-size: 3.5rem;
+        }
+        .price-tag { font-size: 1.2rem; font-weight: 700; color: #16a34a; }
+        .btn-detail { border-radius: 8px; font-weight: 600; font-size: .88rem; padding: 8px 18px; transition: all .2s; }
+        .stock-badge { font-size: .75rem; font-weight: 600; padding: 3px 10px; border-radius: 50px; }
+
+        /* Breadcrumb */
+        .breadcrumb { background: transparent; padding: 0; }
+        .breadcrumb-item a { color: #6c63ff; text-decoration: none; }
+
+        /* Empty state */
+        .empty-state { padding: 60px 20px; text-align: center; }
+        .empty-state-icon { font-size: 4rem; margin-bottom: 16px; }
+
+        footer { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+    </style>
 </head>
 <body>
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Our Store</a>
+            <a class="navbar-brand" href="{{ path('app_index') }}">🛍️ Our Store</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Products</a>
+                        <a class="nav-link" href="{{ path('app_index') }}">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="cart.html">Cart</a>
+                        <a class="nav-link" href="{{ path('app_browse_categories') }}">Catégories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_cart') }}">🛒 Panier</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_profile') }}">Profil</a>
                     </li>
                 </ul>
             </div>
@@ -31,183 +91,100 @@
     <div class="container mt-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Home</a></li>
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Categories</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Electronics</li>
+                <li class="breadcrumb-item"><a href="{{ path('app_index') }}">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_browse_categories') }}">Catégories</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
             </ol>
         </nav>
     </div>
 
-    <!-- Jumbotron -->
+    <!-- Category Hero -->
     <div class="container my-4">
-        <div class="p-5 mb-4 bg-primary bg-gradient text-white rounded-3">
-            <div class="container-fluid py-3">
-                <h1 class="display-4 fw-bold">Electronics</h1>
-                <p class="col-md-8 fs-5">Discover the latest in technology and electronics. From headphones to speakers, find everything you need to stay connected and entertained.</p>
-                <span class="badge bg-light text-dark fs-6">12 Products Available</span>
+        <div class="category-hero p-5 text-white position-relative">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="category-hero-icon">{{ category.icon ?? '🏷️' }}</span>
+                        <div>
+                            <h1 class="display-5 fw-bold mb-1">{{ category.name }}</h1>
+                            <p class="mb-0 opacity-80 fs-5">
+                                {{ category.description ?? 'Découvrez nos produits dans cette catégorie.' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                        {{ products|length }} produit{{ products|length > 1 ? 's' : '' }}
+                    </span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Products by Category -->
+    <!-- Products Grid -->
     <div class="container mb-5">
-        <div class="row mb-4">
-            <div class="col">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3>Browse Electronics</h3>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-secondary active">Grid</button>
-                        <button type="button" class="btn btn-outline-secondary">List</button>
-                    </div>
-                </div>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold mb-0">Produits — {{ category.name }}</h3>
+            <a href="{{ path('app_browse_categories') }}" class="btn btn-outline-secondary btn-sm">
+                ← Toutes les catégories
+            </a>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <!-- Product 1 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="Wireless Headphones">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">Wireless Headphones</h5>
-                        <p class="card-text fw-bold text-success">$79.99</p>
-                        <a href="details.html?id=1" class="btn btn-outline-primary">View Details</a>
-                    </div>
-                </div>
+        {% if products is empty %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <h4 class="fw-bold text-muted">Aucun produit dans cette catégorie</h4>
+                <p class="text-muted">Revenez bientôt, des produits seront ajoutés prochainement.</p>
+                <a href="{{ path('app_browse_categories') }}" class="btn btn-primary mt-2">Voir les autres catégories</a>
             </div>
-
-            <!-- Product 2 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="Bluetooth Speaker">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">Bluetooth Speaker</h5>
-                        <p class="card-text fw-bold text-success">$59.99</p>
-                        <a href="details.html?id=5" class="btn btn-outline-primary">View Details</a>
+        {% else %}
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+                {% for product in products %}
+                    <div class="col">
+                        <div class="card product-card h-100">
+                            {% if product.imageUrl %}
+                                <img src="{{ product.imageUrl }}" class="card-img-top" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="product-img-placeholder">
+                                    {{ category.icon ?? '📦' }}
+                                </div>
+                            {% endif %}
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge bg-primary bg-opacity-10 text-primary mb-2 align-self-start">
+                                    {{ category.name }}
+                                </span>
+                                <h5 class="card-title fw-bold mb-1">{{ product.name }}</h5>
+                                <div class="d-flex align-items-center justify-content-between mt-auto pt-3">
+                                    <span class="price-tag">{{ product.price|number_format(2, '.', ' ') }} €</span>
+                                    {% if product.isInStock() %}
+                                        <span class="stock-badge bg-success bg-opacity-10 text-success">En stock</span>
+                                    {% else %}
+                                        <span class="stock-badge bg-danger bg-opacity-10 text-danger">Rupture</span>
+                                    {% endif %}
+                                </div>
+                                <a href="{{ path('app_product_details', {id: product.id}) }}"
+                                   class="btn btn-primary btn-detail w-100 mt-3">
+                                    Voir le détail →
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
-
-            <!-- Product 3 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="Smartphone Stand">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">Smartphone Stand</h5>
-                        <p class="card-text fw-bold text-success">$19.99</p>
-                        <a href="details.html?id=7" class="btn btn-outline-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="USB-C Cable">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">USB-C Cable 2m</h5>
-                        <p class="card-text fw-bold text-success">$12.99</p>
-                        <a href="details.html?id=8" class="btn btn-outline-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 5 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="Wireless Mouse">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">Wireless Mouse</h5>
-                        <p class="card-text fw-bold text-success">$29.99</p>
-                        <a href="details.html?id=9" class="btn btn-outline-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 6 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="Mechanical Keyboard">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">Mechanical Keyboard</h5>
-                        <p class="card-text fw-bold text-success">$89.99</p>
-                        <a href="details.html?id=10" class="btn btn-outline-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 7 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="Webcam HD">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">Webcam HD 1080p</h5>
-                        <p class="card-text fw-bold text-success">$49.99</p>
-                        <a href="details.html?id=11" class="btn btn-outline-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 8 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="Power Bank">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">Power Bank 20000mAh</h5>
-                        <p class="card-text fw-bold text-success">$39.99</p>
-                        <a href="details.html?id=12" class="btn btn-outline-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 9 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="mouse.png" class="card-img-top" alt="Smart Watch">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Electronics</span>
-                        <h5 class="card-title">Smart Watch Pro</h5>
-                        <p class="card-text fw-bold text-success">$199.99</p>
-                        <a href="details.html?id=13" class="btn btn-outline-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <nav aria-label="Product pagination" class="mt-5">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
+        {% endif %}
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white mt-5 py-4">
+    <footer class="text-white py-4">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h5>Our Store</h5>
-                    <p>Quality products at affordable prices</p>
+                    <h5 class="fw-bold mb-1">🛍️ Our Store</h5>
+                    <p class="text-white-50 small mb-0">Des produits de qualité à prix abordables.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p>&copy; 2024 Our Store. All rights reserved.</p>
+                    <p class="text-white-50 small mb-0">&copy; {{ "now"|date("Y") }} Our Store. Tous droits réservés.</p>
                 </div>
             </div>
         </div>
